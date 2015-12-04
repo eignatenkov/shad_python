@@ -11,16 +11,16 @@ def weighted_choice(choices):
             return key
         upto += choices[key]
 
-with open("test_single_stats.txt") as f:
+with open("single_stats.txt") as f:
     single_stats = json.load(f)
-with open("test_double_stats.txt") as f:
+with open("double_stats.txt") as f:
     double_stats = json.load(f)
 
 prev = '.'
 line = ''
 for i in range(10000):
     if prev[-1] == '.':
-        next_word = random.choice(single_stats.keys()).title()
+        next_word = weighted_choice(single_stats["start sentence"]).title()
         prev = next_word.lower()
     elif len(prev.split(' ')) == 1:
         next_word = weighted_choice(single_stats[prev])
