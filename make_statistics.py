@@ -1,24 +1,38 @@
+# -*- coding: utf-8 -*-
 from collections import Counter
 import os
 import json
 from nltk.tokenize import RegexpTokenizer
 
-def generate_statistics(root_dir):
 
+def generate_statistics(root_dir):
+    """
+    подсчет частоты возникновения слова
+    :param root_dir: директория с корпусом текстов
+    :return: записывает в файлы single_stats.txt и double_stats.txt статистики
+    появления следующих слов после одного слова и после двух слов в виде 
+    словарей из словарей "слово" : {"слово за ним_1" : 10, 
+    "слово за ним_2" : 5} и т.д.
+    """
     single_stats = dict() 
     double_stats = dict()
     
     single_stats["start sentence"] = Counter()
-    
+    # токенизатор, который выделяет из строки слова и слова с точкой на конце.
+    # слова с апострофом (don't, we're) не разбиваются
     tokenizer = RegexpTokenizer('\w+[\']?\w+[\.]?')
 
+# идем по всем файлам
     for subdir, dirs, files in os.walk(root_dir):
         for file in files:
             with open(os.path.join(subdir, file)) as f:
                 for line in f:
+                    # избавляемся от кривых символов, переводим в нижний регистр
                     clean_line = line.decode('unicode_escape').encode('ascii','ignore').lower()
                     clean_line = clean_line.replace('-', ' ')
                     words = tokenizer.tokenize(clean_line)
+                    # идем по словам и в зависимости от их расположения в тексте
+                    # заполняем наши статистики
                     for index, word in enumerate(words):
                         true_word = word.strip('.')
                         if not true_word:
