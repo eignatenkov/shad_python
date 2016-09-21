@@ -35,3 +35,11 @@ ompiled source #
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# txt files #
+#############
+*.txt
+
+# .idea/ #
+##########
+.idea/
