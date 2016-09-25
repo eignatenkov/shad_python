@@ -2,13 +2,13 @@ import unittest
 import numpy as np
 from scipy import stats
 
-from ignatenkov import pb, pa, pd_c
+from ignatenkov import pb, pa, pd_c, pc_ab, pc
 
 params = {
     'amin': 75,
     'amax': 90,
     'bmin': 500,
-    'bmax': 600,
+    'bmax': 510,
     'p1': 0.1,
     'p2': 0.01,
     'p3': 0.3
@@ -53,7 +53,21 @@ class TestPD_C(unittest.TestCase):
         print pd_c(10, self.params)
 
 
-class T
+class TestPC_AB(unittest.TestCase):
+    def setUp(self):
+        self.params = params
+
+    def test_happy_pass(self):
+        print pc_ab(80, 500, self.params)
+
+
+class TestPC(unittest.TestCase):
+    def setUp(self):
+        self.params = params
+
+    def test_happy_pass(self):
+        print 'test pc'
+        print pc(self.params)
 
 if __name__ == '__main__':
     unittest.main()
