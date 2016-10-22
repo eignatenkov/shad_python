@@ -1,7 +1,6 @@
 #!/usr/bin/env python
-
-
 import sys
+
 
 def main():
     current_key = None
