@@ -7,3 +7,7 @@ def get_ip(log_line):
 def get_time(log_line):
     string_time = log_line.split('[')[1].split(']')[0]
     return string_time
+
+
+def get_error_code(log_line):
+    return int(log_line.split('"')[2].split()[0])
