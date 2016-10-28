@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 import sys
+from log_tools import get_error_code
 
 
 def main():
-    current_key = None
     for line in sys.stdin:
-        ip, _ = line.strip().split(' ', 1)
-        print ip
+        if get_error_code(line) == 200:
+            print 1
 
 
 if __name__ == '__main__':
