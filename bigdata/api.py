@@ -7,6 +7,8 @@ import hashlib
 import random
 import struct
 
+from get_total_hits import get_total_hits
+
 from flask import Flask, request, abort, jsonify
 
 app = Flask(__name__)
@@ -32,19 +34,12 @@ def api_hw1():
         abort(400)
     start_date = datetime.datetime(*map(int, start_date.split("-")))
     end_date = datetime.datetime(*map(int, end_date.split("-")))
-
+    everyday_hits = get_total_hits()
     result = {}
     for date in iterate_between_dates(start_date, end_date):
-        total_hits = int(random.normalvariate(1000, 50))
-        total_users = int(random.normalvariate(100, 5))
-        browser_keys = ["Chrome", "Yandex Browser", "Firefox", "Safari", "Internet Explorer", "Other"]
-        browser_values = [20, 20, 20, 16, 13, 10, 1]
-        browser_values = [random.gammavariate(float(v), 1) for v in browser_values]
-        browser_values = [int(float(total_users) * v / sum(browser_values)) for v in browser_values]
+        total_hits = everyday_hits.at[date][0]
         result[date.strftime("%Y-%m-%d")] = {
-            "total_hits": total_hits,
-            "total_users": total_users,
-            "users_by_browser": dict(zip(browser_keys, browser_values)),
+            "total_hits": total_hits
         }
 
     return jsonify(result)
