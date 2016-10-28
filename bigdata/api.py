@@ -37,7 +37,7 @@ def api_hw1():
     everyday_hits = get_total_hits()
     result = {}
     for date in iterate_between_dates(start_date, end_date):
-        total_hits = everyday_hits.loc[date]
+        total_hits = everyday_hits.at[date][0]
         result[date.strftime("%Y-%m-%d")] = {
             "total_hits": total_hits
         }
