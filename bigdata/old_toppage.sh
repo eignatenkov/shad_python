@@ -11,5 +11,5 @@ for i in {16..1}
         -output toppage/${DATE} \
         -mapper hadoop_scripts/toppage_mapper.py \
         -reducer hadoop_scripts/toppage_reducer.py
-    echo "$DATE,$(hdfs dfs -cat toppage/${DATE}/part-00000 | sort -k 2,2nr -k 1,1 | head -10 | awk -F '\t' '{print $1}' | tr '\n' ',')" >> "/home/eignatenkov/shad_python/bigdata/top_pages.csv"
+    echo "$DATE;$(hdfs dfs -cat toppage/${DATE}/part-00000 | sort -k 2,2nr -k 1,1 | head -10 | awk -F '\t' '{print $1}' | tr '\n' ',')" >> "/home/eignatenkov/shad_python/bigdata/top_pages.csv"
   done
