@@ -6,7 +6,7 @@ import getpass
 import hashlib
 import struct
 
-from read_stats import get_total_hits, get_unique_users
+from read_stats import get_total_hits, get_unique_users, get_top_pages
 
 from flask import Flask, request, abort, jsonify
 
@@ -35,13 +35,16 @@ def api_hw1():
     end_date = datetime.datetime(*map(int, end_date.split("-")))
     everyday_hits = get_total_hits()
     everyday_users = get_unique_users()
+    everyday_toppages = get_top_pages()
     result = {}
     for date in iterate_between_dates(start_date, end_date):
         total_hits = everyday_hits.at[date]
         unique_users = everyday_users.at[date]
+        top_pages = everyday_toppages.at[date].strip(',').split(',')
         result[date.strftime("%Y-%m-%d")] = {
             "total_hits": total_hits,
-            "total_users": unique_users
+            "total_users": unique_users,
+            "top_10_pages": top_pages
         }
 
     return jsonify(result)

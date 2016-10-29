@@ -9,3 +9,8 @@ def get_total_hits():
 
 def get_unique_users():
     return pd.Series.from_csv('unique_users.csv', header=None, parse_dates=True)
+
+
+def get_top_pages():
+    return pd.Series.from_csv('top_pages.csv', header=None, sep=';', parse_dates=True)
+
