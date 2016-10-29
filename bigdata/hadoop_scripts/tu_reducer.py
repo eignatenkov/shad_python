@@ -3,7 +3,9 @@ import sys
 
 
 def main():
-    unique_users = set()
+    current_key = None
     for line in sys.stdin:
-        unique_users.add(line.strip())
-    print len(unique_users)
+        ip = line.strip()
+        if current_key != ip:
+            print ip
+            current_key = ip
