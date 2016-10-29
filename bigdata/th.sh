@@ -10,3 +10,5 @@ hadoop jar /opt/hadoop/hadoop-streaming.jar \
     -output th/${DATE} \
     -mapper hadoop_scripts/th_mapper.py \
     -reducer hadoop_scripts/th_reducer.py
+
+echo "$DATE,$(hdfs dfs -cat th/${DATE}/part-00000)" >> "/home/eignatenkov/shad_python/bigdata/total_hits.csv"
