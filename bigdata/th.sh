@@ -3,6 +3,8 @@ DATE=$(date +%Y-%m-%d -d "yesterday")
 
 hdfs dfs -rm -r th/$DATE
 
+cd /home/eignatenkov/shad_python/bigdata
+
 hadoop jar /opt/hadoop/hadoop-streaming.jar \
     -D mapreduce.job.reduces=1 \
     -files hadoop_scripts \
