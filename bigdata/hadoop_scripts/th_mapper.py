@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 import sys
-
-
-def get_error_code(log_line):
-    return int(log_line.split('"')[2].split()[0])
+from log_tools import get_error_code
 
 
 def main():

@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
-hdfs dfs -rm -r th/2016-10-27
+DATE=$(date +%Y-%m-%d -d "yesterday")
+
+hdfs dfs -rm -r th/$DATE
 
 hadoop jar /opt/hadoop/hadoop-streaming.jar \
     -D mapreduce.job.reduces=1 \
-    -files th_mapper.py,th_reducer.py -input /user/sandello/logs/access.log.2016-10-27 -output th/2016-10-27 \
-    -mapper th_mapper.py \
-    -reducer th_reducer.py
+    -files hadoop_scripts \
+    -input /user/sandello/logs/access.log.${DATE} \
+    -output th/${DATE} \
+    -mapper hadoop_scripts/th_mapper.py \
+    -reducer hadoop_scripts/th_reducer.py

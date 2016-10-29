@@ -4,7 +4,6 @@ import argparse
 import datetime
 import getpass
 import hashlib
-import random
 import struct
 
 from get_total_hits import get_total_hits
