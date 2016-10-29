@@ -13,4 +13,4 @@ hadoop jar /opt/hadoop/hadoop-streaming.jar \
     -mapper hadoop_scripts/tu_mapper.py \
     -reducer hadoop_scripts/tu_reducer.py
 
-echo "$DATE,$(hdfs dfs -cat tu/${DATE}/part-00000)" >> "/home/eignatenkov/shad_python/bigdata/total_users.csv"
+echo "$DATE,$(hdfs dfs -cat tu/${DATE}/part-00000)" >> "/home/eignatenkov/shad_python/bigdata/unique_users.csv"
