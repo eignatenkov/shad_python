@@ -3,7 +3,7 @@ def get_ip(log_line):
 
 
 def get_time(log_line):
-    string_time = log_line.split('[')[1].split(']')[0]
+    string_time = log_line.split('[')[1].split(']')[0][:-6]
     return string_time
 
 
