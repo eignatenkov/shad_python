@@ -10,7 +10,8 @@ def main():
         if key == current_page:
             counter += int(value)
         else:
-            print "{0}\t{1}".format(current_page, counter)
+            if current_page:
+                print "{0}\t{1}".format(current_page, counter)
             current_page = key
             counter = 1
     print "{0}\t{1}".format(current_page, counter)
