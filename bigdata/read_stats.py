@@ -22,3 +22,7 @@ def get_sessions_stats():
                                      parse_dates=True)
     sessions.columns = ['ast', 'asl', 'br']
     return sessions
+
+
+def get_new_users():
+    return pd.Series.from_csv('new_users.csv', header=None, parse_dates=True)
