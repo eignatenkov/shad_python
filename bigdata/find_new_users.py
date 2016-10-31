@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import datetime
+import argparse
 from api import iterate_between_dates
 
 
@@ -20,4 +21,10 @@ def count_new_users(date=datetime.date.today()-datetime.timedelta(days=1)):
 
 
 if __name__ == '__main__':
-    count_new_users()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--date", type=str)
+    args = parser.parse_args()
+    if args.date:
+        count_new_users(date=datetime.datetime.strptime(args.date, "%Y-%m-%d").date())
+    else:
+        count_new_users()
