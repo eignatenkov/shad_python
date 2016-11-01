@@ -26,3 +26,7 @@ def get_sessions_stats():
 
 def get_new_users():
     return pd.Series.from_csv('new_users.csv', header=None, parse_dates=True)
+
+
+def get_lost_users():
+    return pd.Series.from_csv('lost_users.csv', header=None, parse_dates=True)
