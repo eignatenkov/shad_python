@@ -30,3 +30,8 @@ def get_new_users():
 
 def get_lost_users():
     return pd.Series.from_csv('lost_users.csv', header=None, parse_dates=True)
+
+
+def get_country_stats():
+    return pd.Series.from_csv('country_info.csv', header=None, sep=';',
+                              parse_dates=True)
