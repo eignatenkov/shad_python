@@ -7,7 +7,7 @@ import hashlib
 import struct
 
 from read_stats import get_total_hits, get_unique_users, get_top_pages, \
-    get_sessions_stats, get_new_users
+    get_sessions_stats, get_new_users, get_lost_users
 
 from flask import Flask, request, abort, jsonify
 
@@ -39,11 +39,13 @@ def api_hw1():
     everyday_toppages = get_top_pages()
     everyday_sessions = get_sessions_stats()
     everyday_new_users = get_new_users()
+    everyday_lost_users = get_lost_users()
     result = {}
     for date in iterate_between_dates(start_date, end_date):
         total_hits = everyday_hits.at[date]
         unique_users = everyday_users.at[date]
         new_users = everyday_new_users.at[date]
+        lost_users = everyday_lost_users.at[date]
         top_pages = everyday_toppages.at[date].strip(',').split(',')
         session_stats = everyday_sessions.loc[date]
         result[date.strftime("%Y-%m-%d")] = {
@@ -53,7 +55,8 @@ def api_hw1():
             "average_session_time": session_stats['ast'],
             "average_session_length": session_stats['asl'],
             "bounce_rate": session_stats['br'],
-            "new_users": new_users
+            "new_users": new_users,
+            "lost_users": lost_users
         }
 
     return jsonify(result)
