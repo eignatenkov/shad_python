@@ -7,6 +7,9 @@ from api import iterate_between_dates
 def count_new_users(date=datetime.date.today()-datetime.timedelta(days=1)):
     old_users = set()
     old_date = date - datetime.timedelta(days=13)
+    if old_date < datetime.date(2016,10,7):
+        print "{0},{1}".format(date.strftime("%Y-%m-%d"), 0)
+        return
     with open("daily_user/{}.txt".format(old_date.strftime("%Y-%m-%d"))) as f:
         for line in f:
             if line.strip() not in old_users:
