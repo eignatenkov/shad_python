@@ -1,4 +1,6 @@
-#!/usr/bin/env python
+#!/shared/anaconda/bin/python
+
+#/usr/bin/env python
 import datetime
 import argparse
 from api import iterate_between_dates
