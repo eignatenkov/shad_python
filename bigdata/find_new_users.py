@@ -6,7 +6,7 @@ from api import iterate_between_dates
 
 def count_new_users(date=datetime.date.today()-datetime.timedelta(days=1)):
     old_users = set()
-    start_date = date - datetime.timedelta(days=13)
+    start_date = max(date - datetime.timedelta(days=13), datetime.date(2016,10,7))
     end_date = date - datetime.timedelta(days=1)
     for day in iterate_between_dates(start_date, end_date):
         with open("daily_user/{}.txt".format(day.strftime("%Y-%m-%d"))) as f:
