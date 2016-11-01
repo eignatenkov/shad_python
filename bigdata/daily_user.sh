@@ -17,4 +17,5 @@ hdfs dfs -get daily_user/${DATE}/part-00000 /home/eignatenkov/shad_python/bigdat
 
 echo "$(/shared/anaconda/bin/python find_new_users.py)" >> new_users.csv
 echo "$(/shared/anaconda/bin/python find_lost_users.py)" >> lost_users.csv
+echo "$(python country_count.py)" >> country_info.csv
 
