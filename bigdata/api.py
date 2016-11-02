@@ -44,24 +44,27 @@ def api_hw1():
     everyday_country_stats = get_country_stats()
     result = {}
     for date in iterate_between_dates(start_date, end_date):
-        total_hits = everyday_hits.at[date]
-        unique_users = everyday_users.at[date]
-        new_users = everyday_new_users.at[date]
-        lost_users = everyday_lost_users.at[date]
-        top_pages = everyday_toppages.at[date].strip(',').split(',')
-        session_stats = everyday_sessions.loc[date]
-        country_stats = json.loads(everyday_country_stats.loc[date])
-        result[date.strftime("%Y-%m-%d")] = {
-            "total_hits": total_hits,
-            "total_users": unique_users,
-            "top_10_pages": top_pages,
-            "average_session_time": session_stats['ast'],
-            "average_session_length": session_stats['asl'],
-            "bounce_rate": session_stats['br'],
-            "new_users": new_users,
-            "lost_users": lost_users,
-            "users_by_country": country_stats
-        }
+        if date < datetime.date(2016,10,7) or date >= datetime.date.today():
+            result[date.strftime("%Y-%m-%d")] = {}
+        else:
+            total_hits = everyday_hits.at[date]
+            unique_users = everyday_users.at[date]
+            new_users = everyday_new_users.at[date]
+            lost_users = everyday_lost_users.at[date]
+            top_pages = everyday_toppages.at[date].strip(',').split(',')
+            session_stats = everyday_sessions.loc[date]
+            country_stats = json.loads(everyday_country_stats.loc[date])
+            result[date.strftime("%Y-%m-%d")] = {
+                "total_hits": total_hits,
+                "total_users": unique_users,
+                "top_10_pages": top_pages,
+                "average_session_time": session_stats['ast'],
+                "average_session_length": session_stats['asl'],
+                "bounce_rate": session_stats['br'],
+                "new_users": new_users,
+                "lost_users": lost_users,
+                "users_by_country": country_stats
+            }
 
     return jsonify(result)
 
