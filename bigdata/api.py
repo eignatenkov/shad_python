@@ -44,7 +44,7 @@ def api_hw1():
     everyday_country_stats = get_country_stats()
     result = {}
     for date in iterate_between_dates(start_date, end_date):
-        if date < datetime.date(2016,10,7) or date >= datetime.date.today():
+        if date < datetime.datetime(2016,10,7) or date >= datetime.datetime.combine(datetime.date.today(), datetime.datetime.min.time()):
             result[date.strftime("%Y-%m-%d")] = {}
         else:
             total_hits = everyday_hits.at[date]
