@@ -26,21 +26,23 @@ def connect():
 
 
 def main():
-    table = connect()
-    b = table.batch()
+    # table = connect()
+    # b = table.batch()
     current_user = None
     current_count = 0
     for line in sys.stdin:
-        ip, count = line.strip().split('\t')
+        ip = line.strip().split('\t')[0]
         if ip != current_user:
             if current_user:
-                b.put(current_user, {"cf:value": current_count})
+                print "{0}\t{1}".format(current_user, current_count)
+                # b.put(current_user, {"cf:value": current_count})
             current_user = ip
             current_count = 1
         else:
             current_count += 1
-    b.put(current_user, {"cf:value": current_count})
-    b.send()
+    # b.put(current_user, {"cf:value": current_count})
+    # b.send()
+    print "{0}\t{1}".format(current_user, current_count)
 
 
 if __name__ == '__main__':
