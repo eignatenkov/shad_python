@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# vim:set et ts=4 sw=4:
 
 import argparse
 import calendar
