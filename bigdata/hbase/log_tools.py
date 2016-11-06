@@ -9,7 +9,7 @@ def get_time(log_line):
 
 def get_day_hour(log_line):
     splits = get_time(log_line).split(':')
-    return splits[0], splits[1]
+    return splits[0].replace('/', '-'), splits[1]
 
 
 def get_error_code(log_line):
