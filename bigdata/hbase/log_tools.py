@@ -7,9 +7,18 @@ def get_time(log_line):
     return string_time
 
 
+def get_day_hour(log_line):
+    splits = get_time(log_line).split(':')
+    return splits[0], splits[1]
+
+
 def get_error_code(log_line):
     return int(log_line.split('"')[2].split()[0])
 
 
 def get_page(log_line):
     return log_line.split('"')[1].strip('GET ').split(' ')[0]
+
+
+def get_visited_profile(log_line):
+    return get_page(log_line).split('?')[0].strip('/')
