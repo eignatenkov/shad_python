@@ -23,6 +23,10 @@ def connect():
     return happybase.Table(TABLE, conn)
 
 
+def counter_to_string(counter):
+    return {key:str(value) for key, value in counter.iteritems()}
+
+
 def main():
     table = connect()
     b = table.batch()
@@ -32,13 +36,13 @@ def main():
         profile, hour = line.strip().split('\t')
         if profile != current_profile:
             if current_profile:
-                b.put(current_profile, hour_counts)
+                b.put(current_profile, counter_to_string(hour_counts))
             current_profile = profile
             hour_counts = Counter()
             hour_counts['f:{}'.format(hour)] += 1
         else:
             hour_counts['f:{}'.format(hour)] += 1
-    b.put(current_profile, hour_counts)
+    b.put(current_profile, counter_to_string(hour_counts))
     b.send()
 
 
