@@ -21,4 +21,8 @@ def get_page(log_line):
 
 
 def get_visited_profile(log_line):
-    return get_page(log_line).split('?')[0].strip('/')
+    candidate = get_page(log_line).split('?')[0].strip('/')
+    if candidate.startswith('id'):
+        return candidate
+    else:
+        return None

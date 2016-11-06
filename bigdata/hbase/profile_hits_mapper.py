@@ -7,7 +7,9 @@ def main():
     for line in sys.stdin:
         if get_error_code(line) == 200:
             day, hour = get_day_hour(line)
-            print "{0}_{1}\t{2}".format(get_visited_profile(line), day, hour)
+            profile = get_visited_profile(line)
+            if profile:
+                print "{0}_{1}\t{2}".format(profile, day, hour)
 
 
 if __name__ == '__main__':
