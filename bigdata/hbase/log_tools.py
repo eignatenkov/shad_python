@@ -1,3 +1,5 @@
+import datetime
+
 def get_ip(log_line):
     return log_line.split(' ', 1)[0]
 
@@ -9,7 +11,7 @@ def get_time(log_line):
 
 def get_day_hour(log_line):
     splits = get_time(log_line).split(':')
-    return splits[0].replace('/', '-'), splits[1]
+    return datetime.datetime.strptime(splits[0], '%d-%b-%Y').strftime('%Y-%m-%d'), splits[1]
 
 
 def get_error_code(log_line):
