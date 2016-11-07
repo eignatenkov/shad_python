@@ -1,13 +1,12 @@
 #!/usr/bin/env bash
-DATE=$(date +%Y-%m-%d -d "yesterday")
 
-hdfs dfs -rm -r profile_hits/$DATE
+hdfs dfs -rm -r profile_hits/all
 
 cd /home/eignatenkov/shad_python/bigdata
 
 hadoop jar /opt/hadoop/hadoop-streaming.jar \
     -files hbase \
-    -input /user/sandello/logs/access.log.${DATE} \
-    -output profile_hits/${DATE} \
+    -input /user/sandello/logs \
+    -output profile_hits/all \
     -mapper hbase/profile_hits_mapper.py \
     -reducer hbase/profile_hits_reducer.py
