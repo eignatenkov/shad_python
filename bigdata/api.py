@@ -89,13 +89,15 @@ def api_hw2_profile_hits():
     if start_date is None or end_date is None or profile_id is None:
         abort(400)
     # start_date = datetime.datetime(*map(int, start_date.split("-")))
-    # end_date = datetime.datetime(*map(int, end_date.split("-")))
+    end_date = datetime.datetime(*map(int, end_date.split("-")))
+    end_date += datetime.timedelta(days=1)
+    end_date = end_date.strftime("%Y-%m-%d")
     row_start = "{0}_{1}".format(profile_id, start_date)
     row_end = "{0}_{1}".format(profile_id, end_date)
     ph_table = connect(PH_TABLE)
     answer = dict()
     for key, data in ph_table.scan(row_start=row_start, row_stop=row_end):
-        answer[key] = [data.get('f:{}'.format(i), 0) for i in range(24)]
+        answer[key] = [int(data.get('f:{}'.format(i), 0)) for i in range(24)]
     return jsonify(answer)
 
 
