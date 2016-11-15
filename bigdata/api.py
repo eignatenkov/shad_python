@@ -6,6 +6,8 @@ import getpass
 import hashlib
 import struct
 import json
+import happybase
+import random
 
 from read_stats import get_total_hits, get_unique_users, get_top_pages, \
     get_sessions_stats, get_new_users, get_lost_users, get_country_stats
@@ -14,6 +16,16 @@ from flask import Flask, request, abort, jsonify
 
 app = Flask(__name__)
 app.secret_key = "my_secret_key"
+
+HOSTS = ["hadoop2-%02d.yandex.ru" % i for i in xrange(11, 14)]
+PH_TABLE = "bigdatashad_eignatenkov_profile_hits"
+
+
+def connect(table_name):
+    host = random.choice(HOSTS)
+    conn = happybase.Connection(host)
+    conn.open()
+    return happybase.Table(table_name, conn)
 
 
 def iterate_between_dates(start_date, end_date):
@@ -67,6 +79,24 @@ def api_hw1():
             }
 
     return jsonify(result)
+
+
+@app.route("/api/hw2/profile_hits")
+def api_hw2_profile_hits():
+    start_date = request.args.get("start_date", None)
+    end_date = request.args.get("end_date", None)
+    profile_id = request.args.get("profile_id", None)
+    if start_date is None or end_date is None or profile_id is None:
+        abort(400)
+    # start_date = datetime.datetime(*map(int, start_date.split("-")))
+    # end_date = datetime.datetime(*map(int, end_date.split("-")))
+    row_start = "{0}_{1}".format(profile_id, start_date)
+    row_end = "{0}_{1}".format(profile_id, end_date)
+    ph_table = connect(PH_TABLE)
+    answer = dict()
+    for key, data in ph_table.scan(row_start=row_start, row_stop=row_end):
+        answer[key] = [data.get('f:{}'.format(i), 0) for i in range(24)]
+    return jsonify(answer)
 
 
 def login_to_port(login):
