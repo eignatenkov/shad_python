@@ -19,6 +19,7 @@ app.secret_key = "my_secret_key"
 
 HOSTS = ["hadoop2-%02d.yandex.ru" % i for i in xrange(11, 14)]
 PH_TABLE = "bigdatashad_eignatenkov_profile_hits"
+PU_TABLE = "bigdatashad_eignatenkov_profile_users"
 
 
 def connect(table_name):
@@ -88,7 +89,6 @@ def api_hw2_profile_hits():
     profile_id = request.args.get("profile_id", None)
     if start_date is None or end_date is None or profile_id is None:
         abort(400)
-    # start_date = datetime.datetime(*map(int, start_date.split("-")))
     end_date = datetime.datetime(*map(int, end_date.split("-")))
     end_date += datetime.timedelta(days=1)
     end_date = end_date.strftime("%Y-%m-%d")
@@ -97,6 +97,26 @@ def api_hw2_profile_hits():
     ph_table = connect(PH_TABLE)
     answer = dict()
     for key, data in ph_table.scan(row_start=row_start, row_stop=row_end):
+        day = key.split('_')[-1]
+        answer[day] = [int(data.get('f:{}'.format(i), 0)) for i in range(24)]
+    return jsonify(answer)
+
+
+@app.route("/api/hw2/profile_users")
+def api_hw2_profile_hits():
+    start_date = request.args.get("start_date", None)
+    end_date = request.args.get("end_date", None)
+    profile_id = request.args.get("profile_id", None)
+    if start_date is None or end_date is None or profile_id is None:
+        abort(400)
+    end_date = datetime.datetime(*map(int, end_date.split("-")))
+    end_date += datetime.timedelta(days=1)
+    end_date = end_date.strftime("%Y-%m-%d")
+    row_start = "{0}_{1}".format(profile_id, start_date)
+    row_end = "{0}_{1}".format(profile_id, end_date)
+    pu_table = connect(PU_TABLE)
+    answer = dict()
+    for key, data in pu_table.scan(row_start=row_start, row_stop=row_end):
         day = key.split('_')[-1]
         answer[day] = [int(data.get('f:{}'.format(i), 0)) for i in range(24)]
     return jsonify(answer)
