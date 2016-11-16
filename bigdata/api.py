@@ -97,7 +97,8 @@ def api_hw2_profile_hits():
     ph_table = connect(PH_TABLE)
     answer = dict()
     for key, data in ph_table.scan(row_start=row_start, row_stop=row_end):
-        answer[key] = [int(data.get('f:{}'.format(i), 0)) for i in range(24)]
+        day = key.split('_')[-1]
+        answer[day] = [int(data.get('f:{}'.format(i), 0)) for i in range(24)]
     return jsonify(answer)
 
 
