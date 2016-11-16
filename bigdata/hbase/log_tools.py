@@ -1,5 +1,6 @@
 import datetime
 
+
 def get_ip(log_line):
     return log_line.split(' ', 1)[0]
 
