@@ -20,6 +20,7 @@ app.secret_key = "my_secret_key"
 HOSTS = ["hadoop2-%02d.yandex.ru" % i for i in xrange(11, 14)]
 PH_TABLE = "bigdatashad_eignatenkov_profile_hits"
 PU_TABLE = "bigdatashad_eignatenkov_profile_users"
+MVP_TABLE = "bigdatashad_eignatenkov_mvp"
 
 
 def connect(table_name):
@@ -119,6 +120,19 @@ def api_hw2_profile_users():
     for key, data in pu_table.scan(row_start=row_start, row_stop=row_end):
         day = key.split('_')[-1]
         answer[day] = [int(data.get('f:{}'.format(i), 0)) for i in range(24)]
+    return jsonify(answer)
+
+
+@app.route("/api/hw2/user_most_visited_profiles")
+def api_hw2_user_most_visited_profiles():
+    date = request.args.get("date", None)
+    user_ip = request.args.get("user_ip", None)
+    if date is None or user_ip is None:
+        abort(400)
+    row = "{0}_{1}".format(user_ip, date)
+    mvp_table = connect(MVP_TABLE)
+    value = mvp_table.row(row)
+    answer = value['f:value'].split('_')
     return jsonify(answer)
 
 
