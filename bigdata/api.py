@@ -103,7 +103,7 @@ def api_hw2_profile_hits():
 
 
 @app.route("/api/hw2/profile_users")
-def api_hw2_profile_hits():
+def api_hw2_profile_users():
     start_date = request.args.get("start_date", None)
     end_date = request.args.get("end_date", None)
     profile_id = request.args.get("profile_id", None)
