@@ -132,8 +132,11 @@ def api_hw2_user_most_visited_profiles():
     row = "{0}_{1}".format(user_ip, date)
     mvp_table = connect(MVP_TABLE)
     value = mvp_table.row(row)
-    answer = value['f:value'].split('_')
-    return jsonify(answer)
+    if len(value) == 0:
+        answer = []
+    else:
+        answer = value['f:value'].split('_')
+    return jsonify({'profiles': answer})
 
 
 def login_to_port(login):
