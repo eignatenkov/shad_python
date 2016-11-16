@@ -29,3 +29,7 @@ def get_visited_profile(log_line):
         return candidate
     else:
         return None
+
+
+def have_like(log_line):
+    return 'like=1' in get_page(log_line)
