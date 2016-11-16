@@ -36,12 +36,12 @@ def main():
         row_key, profile = line.strip().split('\t')
         if row_key != current_row_key:
             if current_row_key:
-                mvp_batch.put(current_row_key, sorted_counter_keys(profile_counts))
+                mvp_batch.put(current_row_key, {'f:value': sorted_counter_keys(profile_counts)})
             current_row_key = row_key
             profile_counts = Counter()
         profile_counts[profile] += 1
 
-    mvp_batch.put(current_row_key, sorted_counter_keys(profile_counts))
+    mvp_batch.put(current_row_key, {'f:value': sorted_counter_keys(profile_counts)})
     mvp_batch.send()
 
 
