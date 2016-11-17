@@ -13,7 +13,7 @@ hadoop jar /opt/hadoop/hadoop-streaming.jar \
     -mapper hadoop_scripts/tu_mapper.py \
     -reducer hadoop_scripts/daily_user_reducer.py
 
-hdfs dfs -get daily_user/${DATE}/part-00000 /home/eignatenkov/shad_python/bigdata/daily_user/${DATE}.txt
+# hdfs dfs -get daily_user/${DATE}/part-00000 /home/eignatenkov/shad_python/bigdata/daily_user/${DATE}.txt
 
 echo "$(/shared/anaconda/bin/python find_new_users.py)" >> new_users.csv
 echo "$(/shared/anaconda/bin/python find_lost_users.py)" >> lost_users.csv
