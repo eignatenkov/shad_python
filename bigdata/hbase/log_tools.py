@@ -16,7 +16,11 @@ def get_day_hour(log_line):
 
 
 def get_error_code(log_line):
-    return int(log_line.split('"')[2].split()[0])
+    try:
+        code = int(log_line.split('"')[2].split()[0])
+        return code
+    except:
+        return 500
 
 
 def get_page(log_line):
