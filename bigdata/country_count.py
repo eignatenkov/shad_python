@@ -3,6 +3,7 @@ import datetime
 import argparse
 from collections import Counter
 from bisect import bisect_left
+import subprocess
 import json
 
 
@@ -22,10 +23,12 @@ def get_country_count(date=datetime.date.today()-datetime.timedelta(days=1)):
             borders.append(int(info[1].strip('"')))
             countries.append(info[3].strip('"\n\r'))
 
-    with open("daily_user/{}.txt".format(date.strftime("%Y-%m-%d"))) as f:
-        for line in f:
-            ip = ip2num(line.strip())
-            ccount[countries[bisect_left(borders, ip)]] += 1
+    h_file = "daily_user/{}/part-00000".format(date.strftime("%Y-%m-%d"))
+    cat = subprocess.Popen(["hdfs", "dfs", "-cat", h_file],
+                           stdout=subprocess.PIPE)
+    for line in cat.stdout:
+        ip = ip2num(line.strip())
+        ccount[countries[bisect_left(borders, ip)]] += 1
 
     print "{0};{1}".format(date.strftime("%Y-%m-%d"),json.dumps(ccount))
 

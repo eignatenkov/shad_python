@@ -1,6 +1,7 @@
 #!/shared/anaconda/bin/python
 import datetime
 import argparse
+import subprocess
 from api import iterate_between_dates
 
 
@@ -9,14 +10,18 @@ def count_new_users(date=datetime.date.today()-datetime.timedelta(days=1)):
     start_date = max(date - datetime.timedelta(days=13), datetime.date(2016,10,7))
     end_date = date - datetime.timedelta(days=1)
     for day in iterate_between_dates(start_date, end_date):
-        with open("daily_user/{}.txt".format(day.strftime("%Y-%m-%d"))) as f:
-            for line in f:
-                old_users.add(line.strip())
+        h_file = "daily_user/{}/part-00000".format(day.strftime("%Y-%m-%d"))
+        cat = subprocess.Popen(["hdfs", "dfs", "-cat", h_file],
+                               stdout=subprocess.PIPE)
+        for line in cat.stdout:
+            old_users.add(line.strip())
     new_users = set()
-    with open("daily_user/{}.txt".format(date.strftime("%Y-%m-%d"))) as f:
-        for line in f:
-            if line.strip() not in old_users:
-                new_users.add(line.strip())
+    h_file = "daily_user/{}/part-00000".format(date.strftime("%Y-%m-%d"))
+    cat = subprocess.Popen(["hdfs", "dfs", "-cat", h_file],
+                           stdout=subprocess.PIPE)
+    for line in cat.stdout:
+        if line.strip() not in old_users:
+            new_users.add(line.strip())
     print "{0},{1}".format(date.strftime("%Y-%m-%d"), len(new_users))
 
 
