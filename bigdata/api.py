@@ -114,16 +114,20 @@ def api_hw2_profile_users():
     profile_id = request.args.get("profile_id", None)
     if start_date is None or end_date is None or profile_id is None:
         abort(400)
+    start_date = datetime.datetime(*map(int, start_date.split("-")))
     end_date = datetime.datetime(*map(int, end_date.split("-")))
-    end_date += datetime.timedelta(days=1)
-    end_date = end_date.strftime("%Y-%m-%d")
-    row_start = "{0}_{1}".format(profile_id, start_date)
-    row_end = "{0}_{1}".format(profile_id, end_date)
     pu_table = connect(PU_TABLE)
     answer = dict()
-    for key, data in pu_table.scan(row_start=row_start, row_stop=row_end):
-        day = key.split('_')[-1]
-        answer[day] = [int(data.get('f:{}'.format(i), 0)) for i in range(24)]
+    for date in iterate_between_dates(start_date, end_date):
+        if date < datetime.datetime(2016,10,7) or date >= datetime.datetime.combine(datetime.date.today(), datetime.datetime.min.time()):
+            pass
+        else:
+            row_key = "{0}_{1}".format(profile_id, date.strftime("%Y-%m-%d"))
+            data = pu_table.row(row_key)
+            if len(data) == 0:
+                answer[date.strftime("%Y-%m-%d")] = [0]*24
+            else:
+                answer[date.strftime("%Y-%m-%d")] = [int(data.get('f:{}'.format(i), 0)) for i in range(24)]
     return jsonify(answer)
 
 
