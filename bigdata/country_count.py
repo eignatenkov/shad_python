@@ -28,7 +28,10 @@ def get_country_count(date=datetime.date.today()-datetime.timedelta(days=1)):
                            stdout=subprocess.PIPE)
     for line in cat.stdout:
         ip = ip2num(line.strip())
-        ccount[countries[bisect_left(borders, ip)]] += 1
+        try:
+            ccount[countries[bisect_left(borders, ip)]] += 1
+        except IndexError:
+            ccount['-'] += 1
 
     print "{0};{1}".format(date.strftime("%Y-%m-%d"),json.dumps(ccount))
 
