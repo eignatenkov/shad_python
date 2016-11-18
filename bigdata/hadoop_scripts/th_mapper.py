@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 import sys
-from log_tools import get_error_code
+from log_tools import parse_line
 
 
 def main():
     for line in sys.stdin:
-        if get_error_code(line) == 200:
+        line_dict = parse_line(line)
+        if line_dict['error'] == '200':
             print '1'
 
 

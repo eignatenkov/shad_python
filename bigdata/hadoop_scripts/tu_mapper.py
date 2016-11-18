@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import sys
-from log_tools import get_error_code, get_ip, parse_line
+from log_tools import parse_line
 
 
 def main():
