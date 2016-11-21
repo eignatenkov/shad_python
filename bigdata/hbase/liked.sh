@@ -10,9 +10,9 @@ hadoop jar /opt/hadoop/hadoop-streaming.jar \
     -D mapreduce.job.output.key.comparator.class=org.apache.hadoop.mapreduce.lib.partition.KeyFieldBasedComparator \
     -D mapreduce.partition.keypartitioner.options='-k1,1' \
     -D mapreduce.partition.keycomparator.options='-k1 -k2' \
-    -partitioner org.apache.hadoop.mapred.lib.KeyFieldBasedPartitioner \
     -files hbase \
     -input /user/sandello/logs/access.log.${DATE} \
     -output liked/${DATE} \
     -mapper hbase/liked_mapper.py \
-    -reducer hbase/liked_reducer.py
+    -reducer hbase/liked_reducer.py \
+    -partitioner org.apache.hadoop.mapred.lib.KeyFieldBasedPartitioner
