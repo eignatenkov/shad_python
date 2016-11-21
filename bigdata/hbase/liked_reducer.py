@@ -41,11 +41,11 @@ def main():
         profile, time, user = line.strip().split('\t')
         if profile != current_profile:
             if current_profile:
-                liked_batch.put(current_profile, {"v": most_recent(liked_dict)})
+                liked_batch.put(current_profile, {"f:v": most_recent(liked_dict)})
             current_profile = profile
             liked_dict = dict()
         liked_dict[user] = time
-    liked_batch.put(current_profile, {"v": most_recent(liked_dict)})
+    liked_batch.put(current_profile, {"f:v": most_recent(liked_dict)})
     liked_batch.send()
 
 
