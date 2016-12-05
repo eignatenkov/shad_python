@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+cd /home/eignatenkov/shad_python/bigdata/spark
 spark-submit --master yarn-client \
      --num-executors 6 \
      --driver-memory 2g \

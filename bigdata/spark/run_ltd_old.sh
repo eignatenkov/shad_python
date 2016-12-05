@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 PREFIX="/user/sandello/logs/access.log."
-for i in {30..3}
+for i in {59..31}
   do
     DATE=$(date +%Y-%m-%d -d "$i days ago")
     spark-submit --master yarn-client \
