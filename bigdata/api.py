@@ -164,6 +164,7 @@ def api_hw2_profile_last_three_liked_users():
         value = liked_table.row(row_id)
         if len(value) > 0:
             answer.extend(value['f:v'].split('_'))
+        day_number += 1
 
     return jsonify({'users': answer[:3]})
 
