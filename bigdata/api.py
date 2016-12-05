@@ -150,17 +150,17 @@ def api_hw2_user_most_visited_profiles():
 
 @app.route("/api/hw2/profile_last_three_liked_users")
 def api_hw2_profile_last_three_liked_users():
-    profile = request.args.get("profile", None)
-    day = request.args.get("day", None)
-    if profile is None or day is None:
+    profile_id = request.args.get("profile_id", None)
+    date = request.args.get("date", None)
+    if profile_id is None or date is None:
         abort(400)
     liked_table = connect(LIKED_TABLE)
     answer = list()
     day_number = 0
     while len(answer) < 3 and day_number < 5:
-        check_date = datetime.datetime(*map(int, day.split("-"))) - \
+        check_date = datetime.datetime(*map(int, date.split("-"))) - \
                      datetime.timedelta(days=day_number)
-        row_id = "{0}_{1}".format(profile, check_date.strftime("%Y-%m-%d"))
+        row_id = "{0}_{1}".format(profile_id, check_date.strftime("%Y-%m-%d"))
         value = liked_table.row(row_id)
         if len(value) > 0:
             answer.extend(value['f:v'].split('_'))
