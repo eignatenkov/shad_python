@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 PREFIX="/user/sandello/logs/access.log."
-for i in {26..20}
+for i in {7..5}
   do
     DATE=$(date +%Y-%m-%d -d "$i days ago")
     hdfs dfs -rm -r toppage/$DATE

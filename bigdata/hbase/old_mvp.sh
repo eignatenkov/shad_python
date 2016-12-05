@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 PREFIX="/user/sandello/logs/access.log."
 cd ..
-for i in {40..1}
+for i in {7..5}
   do
     DATE=$(date +%Y-%m-%d -d "$i days ago")
     hdfs dfs -rm -r user_mvp/$DATE

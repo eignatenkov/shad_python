@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 PREFIX="/user/sandello/logs/access.log."
-for i in {26..23}
+for i in {7..5}
   do
     DATE=$(date +%Y-%m-%d -d "$i days ago")
     hdfs dfs -rm -r daily_user/$DATE
@@ -13,5 +13,4 @@ for i in {26..23}
         -mapper hadoop_scripts/tu_mapper.py \
         -reducer hadoop_scripts/daily_user_reducer.py
 
-    hdfs dfs -get daily_user/${DATE}/part-00000 /home/eignatenkov/shad_python/bigdata/daily_user/${DATE}.txt
   done
