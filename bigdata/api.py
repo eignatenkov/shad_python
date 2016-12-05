@@ -80,7 +80,7 @@ def api_hw1():
                 "bounce_rate": session_stats['br'],
                 "new_users": new_users,
                 "lost_users": lost_users,
-                "users_by_country": country_stats,
+                "users_by_country": country_stats
 
             }
             try:
