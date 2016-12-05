@@ -70,6 +70,7 @@ def api_hw1():
             lost_users = everyday_lost_users.at[date]
             top_pages = everyday_toppages.at[date].strip(',').split(',')
             session_stats = everyday_sessions.loc[date]
+            liked_stats = everyday_liked.at[date]
             country_stats = json.loads(everyday_country_stats.loc[date])
             result[date.strftime("%Y-%m-%d")] = {
                 "total_hits": total_hits,
@@ -80,15 +81,10 @@ def api_hw1():
                 "bounce_rate": session_stats['br'],
                 "new_users": new_users,
                 "lost_users": lost_users,
-                "users_by_country": country_stats
-
+                "users_by_country": country_stats,
+                "profile_liked_three_days": liked_stats
             }
-            try:
-                result[date.strftime("%Y-%m-%d")]["profile_liked_three_days"] = everyday_liked.at[date]
-            except KeyError:
-                pass
-
-        return jsonify(result)
+    return jsonify(result)
 
 
 @app.route("/api/hw2/profile_hits")
