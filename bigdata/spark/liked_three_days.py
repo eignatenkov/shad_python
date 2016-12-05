@@ -31,7 +31,7 @@ if __name__ == "__main__":
         return liked_log.distinct().map(lambda x: (x, 1))
 
     if args.date:
-        y_day = datetime.datetime.strptime(args.date, "%Y-%m-&d")
+        y_day = datetime.datetime.strptime(args.date, "%Y-%m-%d")
     else:
         y_day = datetime.datetime.today() - datetime.timedelta(days=1)
     yy_day = y_day - datetime.timedelta(days=1)
@@ -40,6 +40,6 @@ if __name__ == "__main__":
     result = process_day(y_day).union(process_day(yy_day)).union(process_day(yyy_day)).reduceByKey(lambda a, b: a + b).filter(lambda (k, v): v == 3).count()
 
     with open("/home/eignatenkov/shad_python/bigdata/liked_three_days.csv", 'a') as file:
-        file.write('{0};{1}'.format(y_day.strftime("%Y-%m-%d"), result))
+        file.write('{0};{1}\n'.format(y_day.strftime("%Y-%m-%d"), result))
 
     sc.stop()
