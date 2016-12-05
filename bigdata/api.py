@@ -10,7 +10,8 @@ import happybase
 import random
 
 from read_stats import get_total_hits, get_unique_users, get_top_pages, \
-    get_sessions_stats, get_new_users, get_lost_users, get_country_stats
+    get_sessions_stats, get_new_users, get_lost_users, get_country_stats, \
+    get_liked_three_days
 
 from flask import Flask, request, abort, jsonify
 
@@ -57,6 +58,7 @@ def api_hw1():
     everyday_new_users = get_new_users()
     everyday_lost_users = get_lost_users()
     everyday_country_stats = get_country_stats()
+    everyday_liked = get_liked_three_days()
     result = {}
     for date in iterate_between_dates(start_date, end_date):
         if date < datetime.datetime(2016,10,7) or date >= datetime.datetime.combine(datetime.date.today(), datetime.datetime.min.time()):
@@ -78,10 +80,15 @@ def api_hw1():
                 "bounce_rate": session_stats['br'],
                 "new_users": new_users,
                 "lost_users": lost_users,
-                "users_by_country": country_stats
-            }
+                "users_by_country": country_stats,
 
-    return jsonify(result)
+            }
+            try:
+                result[date.strftime("%Y-%m-%d")]["profile_liked_three_days"] = everyday_liked.at[date]
+            except KeyError:
+                pass
+
+        return jsonify(result)
 
 
 @app.route("/api/hw2/profile_hits")

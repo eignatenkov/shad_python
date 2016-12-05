@@ -35,3 +35,8 @@ def get_lost_users():
 def get_country_stats():
     return pd.Series.from_csv('country_info.csv', header=None, sep=';',
                               parse_dates=True)
+
+
+def get_liked_three_days():
+    return pd.Series.from_csv('liked_three_days.csv', header=None, sep=';',
+                              parse_dates=True)
