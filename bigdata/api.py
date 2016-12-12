@@ -64,26 +64,31 @@ def api_hw1():
         if date < datetime.datetime(2016,10,7) or date >= datetime.datetime.combine(datetime.date.today(), datetime.datetime.min.time()):
             result[date.strftime("%Y-%m-%d")] = {}
         else:
-            total_hits = everyday_hits.at[date]
-            unique_users = everyday_users.at[date]
-            new_users = everyday_new_users.at[date]
-            lost_users = everyday_lost_users.at[date]
+            total_hits = everyday_hits.get(date, None)
+            total_users = everyday_users.get(date, None)
+            new_users = everyday_new_users.get(date, None)
+            lost_users = everyday_lost_users.get(date, None)
             top_pages = everyday_toppages.at[date].strip(',').split(',')
             session_stats = everyday_sessions.loc[date]
-            liked_stats = everyday_liked.at[date]
+            liked_stats = everyday_liked.get(date, None)
             country_stats = json.loads(everyday_country_stats.loc[date])
             result[date.strftime("%Y-%m-%d")] = {
-                "total_hits": total_hits,
-                "total_users": unique_users,
                 "top_10_pages": top_pages,
                 "average_session_time": session_stats['ast'],
                 "average_session_length": session_stats['asl'],
                 "bounce_rate": session_stats['br'],
-                "new_users": new_users,
-                "lost_users": lost_users,
-                "users_by_country": country_stats,
-                "profile_liked_three_days": liked_stats
+                "users_by_country": country_stats
             }
+            if total_hits:
+                result[date.strftime("%Y-%m-%d")]['total_hits'] = total_hits
+	    if total_users:
+		result[date.strftime("%Y-%m-%d")]['total_users'] = total_users
+	    if new_users:
+        	result[date.strftime("%Y-%m-%d")]['new_users'] = new_users
+	    if lost_users:
+		result[date.strftime("%Y-%m-%d")]['lost_users'] = lost_users
+	    if liked_stats:
+		result[date.strftime("%Y-%m-%d")]['profile_liked_three_days'] = liked_stats
     return jsonify(result)
 
 
