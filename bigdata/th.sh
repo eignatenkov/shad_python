@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-DATE=$(date +%Y-%m-%d -d "yesterday")
-
+DATE=${1:-$(date +%Y-%m-%d -d "yesterday")}
 hdfs dfs -rm -r th/$DATE
 
 cd /home/eignatenkov/shad_python/bigdata

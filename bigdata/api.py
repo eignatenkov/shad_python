@@ -79,15 +79,15 @@ def api_hw1():
                 "bounce_rate": session_stats['br'],
                 "users_by_country": country_stats
             }
-            if total_hits:
+            if total_hits is not None:
                 result[date.strftime("%Y-%m-%d")]['total_hits'] = total_hits
-	    if total_users:
+	    if total_users is not None:
 		result[date.strftime("%Y-%m-%d")]['total_users'] = total_users
-	    if new_users:
+	    if new_users is not None:
         	result[date.strftime("%Y-%m-%d")]['new_users'] = new_users
-	    if lost_users:
+	    if lost_users is not None:
 		result[date.strftime("%Y-%m-%d")]['lost_users'] = lost_users
-	    if liked_stats:
+	    if liked_stats is not None:
 		result[date.strftime("%Y-%m-%d")]['profile_liked_three_days'] = liked_stats
     return jsonify(result)
 
