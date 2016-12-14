@@ -38,6 +38,8 @@ if __name__ == "__main__":
     lines = kvs.map(lambda x: x[1])
 
     bad_lines = lines.filter(is_bad_line)
+    count = bad_lines.reduceByKey(add)
+    count.pprint()
     print("15_second_count={}".format(bad_lines.reduceByKey(add)))
 
 
