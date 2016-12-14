@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-from __future__ import print_function
 import sys
 from operator import add
 
@@ -32,11 +31,6 @@ def printTopUsers(rdd):
 if __name__ == "__main__":
     sc = SparkContext(appName="Ignatenkov_badrequests")
     ssc = StreamingContext(sc, 15)
-    ssc.checkpoint("checkpointKafka")
-
-    logger = sc._jvm.org.apache.log4j
-    logger.LogManager.getLogger("org").setLevel(logger.Level.ERROR)
-    logger.LogManager.getLogger("akka").setLevel(logger.Level.ERROR)
 
     zkQuorum, topic = sys.argv[1:]
     kvs = KafkaUtils.createStream(ssc, zkQuorum,
