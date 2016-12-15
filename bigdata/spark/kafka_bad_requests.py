@@ -20,11 +20,12 @@ def is_bad_line(log_line):
         return True
 
 
-def print_count(rdd):
-    print("15_second_count={}".format(rdd.count()))
-
-def print_mincount(rdd):
-    print("60_second_count={}".format(rdd.countByWindow(60,60)))
+def print_rdd(rdd, title):
+    value = rdd.collect()[0] if len(rdd.collect()) > 0 else 0
+    if title.startswith('60'):
+        print "{0}={1};".format(title, value)
+    else:
+        print "{0}={1};".format(title, value),
 
 if __name__ == "__main__":
     sc = SparkContext(appName="Ignatenkov_badrequests")
@@ -40,37 +41,9 @@ if __name__ == "__main__":
     lines = kvs.map(lambda x: x[1])
 
     bad_lines = lines.filter(is_bad_line)
-    bad_lines.foreachRDD(print_count)
-
-    bad_lines.foreachRDD(print_mincount)
-    # #2
-    # counts = lines.flatMap(lambda line: readUserIp(line)) \
-    #      .map(lambda word: (word, 1)) \
-    #      .reduceByKeyAndWindow(lambda a, b: a+b, 10, 2)
-    # counts.pprint()
-
-    #3
-    # counts = lines.flatMap(lambda line : readUserIp(line)) \
-    #       .filter(lambda user: filterUser(user)) \
-    #       .map(lambda user: (user, 1)) \
-    #       .reduceByKey(lambda a, b: a+b);
-    # counts.pprint()
-    # counts.saveAsTextFiles('eight/eightUsers')
-
-    #4
-    # windowedCount1 = counts.window(10)
-    # windowedCount2 = counts.window(60)
-    # joinedStream = windowedCount1.join(windowedCount2)
-    # joinedStream.pprint()
-
-    # 5
-    # sortedCounts = lines.flatMap(lambda line: readUserIp(line)) \
-    #     .map(lambda user: (user, 1)) \
-    #     .updateStateByKey(updateFunc) \
-    #     .map(lambda (user, count): (count, user)) \
-    #     .transform(lambda rdd: rdd.sortByKey(False)) \
-    #     .foreachRDD(printTopUsers)
-    # # sortedCounts.pprint()
+    window = bad_lines.countByWindow(60, 15)
+    bad_lines.foreachRDD(lambda x: print_rdd(x, '15_second_count'))
+    window.foreachRDD(lambda x: print_rdd(x, '60_second_count'))
 
     ssc.start()
     ssc.awaitTermination()

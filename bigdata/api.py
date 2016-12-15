@@ -61,7 +61,9 @@ def api_hw1():
     everyday_liked = get_liked_three_days()
     result = {}
     for date in iterate_between_dates(start_date, end_date):
-        if date < datetime.datetime(2016,10,7) or date >= datetime.datetime.combine(datetime.date.today(), datetime.datetime.min.time()):
+        if date < datetime.datetime(2016, 10,
+                                    7) or date >= datetime.datetime.combine(
+                datetime.date.today(), datetime.datetime.min.time()):
             result[date.strftime("%Y-%m-%d")] = {}
         else:
             total_hits = everyday_hits.get(date, None)
@@ -81,14 +83,15 @@ def api_hw1():
             }
             if total_hits is not None:
                 result[date.strftime("%Y-%m-%d")]['total_hits'] = total_hits
-	    if total_users is not None:
-		result[date.strftime("%Y-%m-%d")]['total_users'] = total_users
-	    if new_users is not None:
-        	result[date.strftime("%Y-%m-%d")]['new_users'] = new_users
-	    if lost_users is not None:
-		result[date.strftime("%Y-%m-%d")]['lost_users'] = lost_users
-	    if liked_stats is not None:
-		result[date.strftime("%Y-%m-%d")]['profile_liked_three_days'] = liked_stats
+            if total_users is not None:
+                result[date.strftime("%Y-%m-%d")]['total_users'] = total_users
+            if new_users is not None:
+                result[date.strftime("%Y-%m-%d")]['new_users'] = new_users
+            if lost_users is not None:
+                result[date.strftime("%Y-%m-%d")]['lost_users'] = lost_users
+            if liked_stats is not None:
+                result[date.strftime("%Y-%m-%d")][
+                    'profile_liked_three_days'] = liked_stats
     return jsonify(result)
 
 
@@ -104,15 +107,18 @@ def api_hw2_profile_hits():
     ph_table = connect(PH_TABLE)
     answer = dict()
     for date in iterate_between_dates(start_date, end_date):
-        if date < datetime.datetime(2016,10,7) or date >= datetime.datetime.combine(datetime.date.today(), datetime.datetime.min.time()):
+        if date < datetime.datetime(2016, 10,
+                                    7) or date >= datetime.datetime.combine(
+                datetime.date.today(), datetime.datetime.min.time()):
             pass
         else:
             row_key = "{0}_{1}".format(profile_id, date.strftime("%Y-%m-%d"))
             data = ph_table.row(row_key)
             if len(data) == 0:
-                answer[date.strftime("%Y-%m-%d")] = [0]*24
+                answer[date.strftime("%Y-%m-%d")] = [0] * 24
             else:
-                answer[date.strftime("%Y-%m-%d")] = [int(data.get('f:{}'.format(i), 0)) for i in range(24)]
+                answer[date.strftime("%Y-%m-%d")] = [
+                    int(data.get('f:{}'.format(i), 0)) for i in range(24)]
     return jsonify(answer)
 
 
@@ -128,15 +134,18 @@ def api_hw2_profile_users():
     pu_table = connect(PU_TABLE)
     answer = dict()
     for date in iterate_between_dates(start_date, end_date):
-        if date < datetime.datetime(2016,10,7) or date >= datetime.datetime.combine(datetime.date.today(), datetime.datetime.min.time()):
+        if date < datetime.datetime(2016, 10,
+                                    7) or date >= datetime.datetime.combine(
+                datetime.date.today(), datetime.datetime.min.time()):
             pass
         else:
             row_key = "{0}_{1}".format(profile_id, date.strftime("%Y-%m-%d"))
             data = pu_table.row(row_key)
             if len(data) == 0:
-                answer[date.strftime("%Y-%m-%d")] = [0]*24
+                answer[date.strftime("%Y-%m-%d")] = [0] * 24
             else:
-                answer[date.strftime("%Y-%m-%d")] = [int(data.get('f:{}'.format(i), 0)) for i in range(24)]
+                answer[date.strftime("%Y-%m-%d")] = [
+                    int(data.get('f:{}'.format(i), 0)) for i in range(24)]
     return jsonify(answer)
 
 
@@ -192,13 +201,15 @@ def login_to_port(login):
 def main():
     parser = argparse.ArgumentParser(description="HW 1 Example")
     parser.add_argument("--host", type=str, default="127.0.0.1")
-    parser.add_argument("--port", type=int, default=login_to_port(getpass.getuser()))
+    parser.add_argument("--port", type=int,
+                        default=login_to_port(getpass.getuser()))
     parser.add_argument("--debug", action="store_true", dest="debug")
     parser.add_argument("--no-debug", action="store_false", dest="debug")
     parser.set_defaults(debug=False)
 
     args = parser.parse_args()
     app.run(host=args.host, port=args.port, debug=args.debug)
+
 
 if __name__ == "__main__":
     main()
