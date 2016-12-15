@@ -33,15 +33,19 @@ if __name__ == "__main__":
         exit(-1)
 
     sc = SparkContext(appName="PythonStreamingKafkaWordCount")
-    ssc = StreamingContext(sc, 10)
+    ssc = StreamingContext(sc, 15)
     ssc.checkpoint("checkpointKafka")
 
+    logger = sc._jvm.org.apache.log4j
+    logger.LogManager.getLogger("org"). setLevel( logger.Level.ERROR )
+    logger.LogManager.getLogger("akka").setLevel( logger.Level.ERROR )
+    
     zkQuorum, topic = sys.argv[1:]
     kvs = KafkaUtils.createStream(ssc, zkQuorum, "spark-streaming-consumer-11833", {topic: 4})
     lines = kvs.map(lambda x: x[1])
     counts = lines.flatMap(lambda line: readUserIp(line)) \
-        .map(lambda word: (word, 1)) \
-        .reduceByKey(lambda a, b: a+b)
+        .map(lambda word: 1) \
+        .reduce(lambda a, b: a+b)
     counts.pprint()
 
     ssc.start()

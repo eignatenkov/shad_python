@@ -20,29 +20,29 @@ def is_bad_line(log_line):
         return True
 
 
-def printTopUsers(rdd):
-    top10Rdd = rdd.take(5)
-    print("Top 5 users:")
-    for r in top10Rdd:
-        print("User %s total hits = %s" % (r[1], r[0]))
-    print("--------------------------------------------")
+def print_count(rdd):
+    print("15_second_count={}".format(rdd.count()))
 
+def print_mincount(rdd):
+    print("60_second_count={}".format(rdd.countByWindow(60,60)))
 
 if __name__ == "__main__":
     sc = SparkContext(appName="Ignatenkov_badrequests")
     ssc = StreamingContext(sc, 15)
 
+    logger = sc._jvm.org.apache.log4j
+    logger.LogManager.getLogger("org"). setLevel( logger.Level.ERROR )
+    logger.LogManager.getLogger("akka").setLevel( logger.Level.ERROR )
+    
     zkQuorum, topic = sys.argv[1:]
     kvs = KafkaUtils.createStream(ssc, zkQuorum,
                                   "spark-streaming-consumer-11833", {topic: 4})
     lines = kvs.map(lambda x: x[1])
 
     bad_lines = lines.filter(is_bad_line)
-    count = bad_lines.reduce(add)
-    count.pprint()
-    print("15_second_count={}".format(count))
+    bad_lines.foreachRDD(print_count)
 
-
+    bad_lines.foreachRDD(print_mincount)
     # #2
     # counts = lines.flatMap(lambda line: readUserIp(line)) \
     #      .map(lambda word: (word, 1)) \
