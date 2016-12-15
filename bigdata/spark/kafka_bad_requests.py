@@ -30,7 +30,7 @@ def print_rdd(rdd, title):
 if __name__ == "__main__":
     sc = SparkContext(appName="Ignatenkov_badrequests")
     ssc = StreamingContext(sc, 15)
-
+    ssc.checkpoint('badcount_checkpoint')  
     logger = sc._jvm.org.apache.log4j
     logger.LogManager.getLogger("org"). setLevel( logger.Level.ERROR )
     logger.LogManager.getLogger("akka").setLevel( logger.Level.ERROR )
@@ -41,8 +41,9 @@ if __name__ == "__main__":
     lines = kvs.map(lambda x: x[1])
 
     bad_lines = lines.filter(is_bad_line)
+    single = bad_lines.count()
     window = bad_lines.countByWindow(60, 15)
-    bad_lines.foreachRDD(lambda x: print_rdd(x, '15_second_count'))
+    single.foreachRDD(lambda x: print_rdd(x, '15_second_count'))
     window.foreachRDD(lambda x: print_rdd(x, '60_second_count'))
 
     ssc.start()
