@@ -1,16 +1,11 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
 import sys
-from operator import add
 
 from pyspark import SparkContext
 from pyspark.streaming import StreamingContext
 from pyspark.streaming.kafka import KafkaUtils
-
-
-def updateFunc(new_values, last_sum):
-    return sum(new_values) + (last_sum or 0)
-
 
 def is_bad_line(log_line):
     try:
@@ -19,13 +14,18 @@ def is_bad_line(log_line):
     except:
         return True
 
+def update_total(new, runningCount):
+    if runningCount is None:
+        runningCount = 0
+    return sum(new, runningCount)
 
-def print_rdd(rdd, title):
-    value = rdd.collect()[0] if len(rdd.collect()) > 0 else 0
-    if title.startswith('60'):
-        print "{0}={1};".format(title, value)
-    else:
-        print "{0}={1};".format(title, value),
+
+def print_counts(rdd):
+    values = rdd.collectAsMap().get('count')
+#    print(values)
+    if values:
+        print("15_second_count={0}; 60_second_count={1}; total_count={2};".format(values[0][0], values[0][1], values[1]))
+
 
 if __name__ == "__main__":
     sc = SparkContext(appName="Ignatenkov_badrequests")
@@ -41,10 +41,13 @@ if __name__ == "__main__":
     lines = kvs.map(lambda x: x[1])
 
     bad_lines = lines.filter(is_bad_line)
-    single = bad_lines.count()
-    window = bad_lines.countByWindow(60, 15)
-    single.foreachRDD(lambda x: print_rdd(x, '15_second_count'))
-    window.foreachRDD(lambda x: print_rdd(x, '60_second_count'))
+    count_bl = bad_lines.count().map(lambda x: ('count', x))
+    count_wl = bad_lines.countByWindow(60,15).map(lambda x: ('count', x))
+    total_count = count_bl.updateStateByKey(update_total)
+    joinedStream = count_bl.join(count_wl).join(total_count)
+
+    joinedStream.foreachRDD(print_counts)
+    #joinedStream.pprint()
 
     ssc.start()
     ssc.awaitTermination()
