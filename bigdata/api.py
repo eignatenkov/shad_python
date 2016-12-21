@@ -118,7 +118,7 @@ def api_hw2_profile_hits():
                 answer[date.strftime("%Y-%m-%d")] = [0] * 24
             else:
                 answer[date.strftime("%Y-%m-%d")] = [
-                    int(data.get('f:{}'.format(i), 0)) for i in range(24)]
+                    int(data.get('f:{}'.format(str(i).zfill(2)), 0)) for i in range(24)]
     return jsonify(answer)
 
 
@@ -145,7 +145,7 @@ def api_hw2_profile_users():
                 answer[date.strftime("%Y-%m-%d")] = [0] * 24
             else:
                 answer[date.strftime("%Y-%m-%d")] = [
-                    int(data.get('f:{}'.format(i), 0)) for i in range(24)]
+                    int(data.get('f:{}'.format(str(i).zfill(2)), 0)) for i in range(24)]
     return jsonify(answer)
 
 
